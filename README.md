@@ -1,1 +1,1 @@
-# card-vault
+# 🃏 CardVault — The Offline Trading Card Tracker App
