@@ -39,22 +39,27 @@ This is what makes Card Vault special. Instead of just tracking cards like a spr
 ### Frontend
 - **React 18** — Component-based UI framework
 - **TypeScript** — Type-safe development
-- **Vite** — Fast build tool and dev server
-- **TailwindCSS** — Utility-first styling
-- **shadcn/ui** — High-quality, accessible React components
-- **React Router** — Client-side routing
-- **React DnD or native Drag & Drop API** — Interactive drag-and-drop for binder planning
+- **Vite 6** — Fast build tool and dev server
+- **TailwindCSS 4** — Utility-first styling
+- **Radix UI** — Headless, accessible component primitives
+- **React Router 7** — Client-side routing
+- **React Hook Form** — Efficient form state management
+- **React DnD** — Drag-and-drop for binder planning
+- **Lucide React** — Icon library
+- **Sonner** — Toast notifications
 
-### Backend ✅
-- **Flask** — Lightweight Python web framework for REST API
-- **MongoDB Atlas** — Cloud NoSQL database for flexible card/binder documents
-- **PyMongo** — Python MongoDB driver
-- **JWT Authentication** — Secure token-based authentication
-- **Bcrypt** — Password hashing and security
+### Backend
+- **Flask 3.0** — Lightweight Python web framework for REST API
+- **MongoDB Atlas** — Cloud NoSQL database
+- **PyMongo 4.7** — Python MongoDB driver
+- **PyJWT 2.11** — JWT authentication
+- **Bcrypt 4.1** — Password hashing and security
+- **Flask-CORS 4.0** — Cross-origin request handling
+- **python-dotenv 1.0** — Environment variable management
 
 ### Deployment
-- **Frontend**: Vercel, Netlify, or any static host (React/Vite)
-- **Backend**: Railway, Heroku, AWS, or any cloud platform (Flask)
+- **Frontend**: Vercel (React/Vite)
+- **Backend**: Render (Flask)
 - **Database**: MongoDB Atlas (managed cloud database)
 
 ### Responsive Design
