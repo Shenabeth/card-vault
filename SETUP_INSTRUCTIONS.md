@@ -192,12 +192,14 @@ curl -X GET http://localhost:5000/api/cards \
 
 The React app is currently using localStorage. Update it to use the backend API:
 
+**For Vercel deployment**, set `VITE_API_URL` in your frontend environment variables to your Render API base URL (example: `https://your-render-service.onrender.com/api`).
+
 ### Step 1: Update Auth Context
 
 Update `src/app/context/AuthContext.tsx`:
 
 ```typescript
-const API_URL = 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const login = async (username: string, password: string) => {
   const response = await fetch(`${API_URL}/auth/login`, {
@@ -219,7 +221,7 @@ const login = async (username: string, password: string) => {
 Update `src/app/hooks/useCardData.ts` to fetch from backend:
 
 ```typescript
-const API_URL = 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 const token = localStorage.getItem('token');
 
 const getCards = async () => {
@@ -418,7 +420,3 @@ In production:
 - Check `MULTI_TENANCY.md` for scaling questions
 - Check docstrings in `routes/` files for endpoint details
 - Check MongoDB logs for database issues
-
----
-
-That's it! Your backend is complete and ready. Follow the 5 steps above and you're good to go! 🚀

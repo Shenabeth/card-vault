@@ -13,7 +13,10 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = 30 * 24 * 60 * 60  # 30 days
     
     # CORS
-    CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'http://localhost:5173,http://localhost:3000').split(',')
+    CORS_ORIGINS = os.getenv(
+        'CORS_ORIGINS',
+        'http://localhost:5173,http://localhost:3000,https://card-vault-collection.vercel.app'
+    ).split(',')
 
 
 class DevelopmentConfig(Config):

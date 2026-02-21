@@ -256,6 +256,10 @@ python app.py
 
 Backend runs at `http://localhost:5000`
 
+**Production wiring:**
+- Set `CORS_ORIGINS` on the backend to include `https://card-vault-collection.vercel.app`
+- Set `VITE_API_URL` in the frontend (Vercel env) to your Render API base URL, e.g. `https://your-render-service.onrender.com/api`
+
 ### Demo Account
 After seeding demo data:
 - **Username**: `demo`

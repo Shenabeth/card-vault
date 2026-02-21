@@ -107,6 +107,8 @@ CORS_ORIGINS=http://localhost:5173,http://localhost:3000
 PORT=5000
 ```
 
+For production, add your Vercel URL to `CORS_ORIGINS` (example: `https://card-vault-collection.vercel.app`).
+
 **For MongoDB Atlas**, update MONGODB_URI:
 ```
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/card_vault?retryWrites=true&w=majority
@@ -228,7 +230,7 @@ Update the React API service to use your backend URL:
 
 ```typescript
 // In your React hooks (useCardData.ts, useBinderData.ts)
-const API_URL = 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // Example
 const response = await fetch(`${API_URL}/cards`, {
@@ -303,7 +305,3 @@ No additional changes needed - the code is deployment-ready!
 4. **Add Notifications** - Email updates on collection changes
 5. **API Rate Limiting** - Prevent abuse
 6. **Better Error Handling** - More specific error messages
-
----
-
-For questions or issues, check the main README.md!
