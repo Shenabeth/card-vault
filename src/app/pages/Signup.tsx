@@ -6,6 +6,8 @@ import { Label } from '../components/ui/label';
 import { Card } from '../components/ui/card';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
+import PublicNavbar from '../components/PublicNavbar';
+import Footer from '../components/Footer';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -45,7 +47,9 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
+      <PublicNavbar />
+      <div className="flex-1 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
         <Card className="border-slate-700 bg-slate-800/50 backdrop-blur">
           <div className="p-8 space-y-6">
@@ -109,16 +113,6 @@ export default function Signup() {
               </Button>
             </form>
 
-            {/* Divider */}
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-600"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-slate-800/50 text-slate-400">Already have an account?</span>
-              </div>
-            </div>
-
             {/* Login Link */}
             <div className="text-center">
               <p className="text-slate-400">
@@ -130,13 +124,9 @@ export default function Signup() {
             </div>
           </div>
         </Card>
-
-        {/* Info */}
-        <div className="mt-6 p-4 bg-slate-800/50 border border-slate-700 rounded-lg text-center text-sm text-slate-400">
-          <p className="font-semibold text-white mb-2">Privacy First</p>
-          <p>Your data is securely stored and never shared</p>
-        </div>
       </div>
+      </div>
+      <Footer />
     </div>
   );
 }

@@ -8,9 +8,12 @@ import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { Switch } from '../components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { ArrowLeft, Save } from 'lucide-react';
+import { Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { Card, GradingCompany, CardCondition, CardTag } from '../types';
+import Footer from '../components/Footer';
+import AuthenticatedNavbar from '../components/AuthenticatedNavbar';
+import AuthenticatedTabs from '../components/AuthenticatedTabs';
 
 export default function AddEditCard() {
   const { id } = useParams<{ id: string }>();
@@ -31,7 +34,8 @@ export default function AddEditCard() {
     estimated_value: '',
     quantity: '1',
     notes: '',
-    tags: [] as string[]
+    tags: [] as string[],
+    image_url: ''
   });
 
   useEffect(() => {
@@ -51,7 +55,8 @@ export default function AddEditCard() {
           estimated_value: card.estimated_value?.toString() || '',
           quantity: card.quantity.toString(),
           notes: card.notes || '',
-          tags: card.tags || []
+          tags: card.tags || [],
+          image_url: card.image_url || ''
         });
       }
     }
@@ -107,77 +112,139 @@ export default function AddEditCard() {
     }));
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate(isEditing ? `/card/${id}` : '/collection')}
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-              {isEditing ? 'Edit Card' : 'Add Card'}
-            </h1>
-          </div>
-        </div>
-      </header>
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const imageData = event.target?.result as string;
+        setFormData(prev => ({ ...prev, image_url: imageData }));
+        toast.success('Image uploaded');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    const items = e.clipboardData?.items;
+    if (items) {
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const blob = items[i].getAsFile();
+          if (blob) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              const imageData = event.target?.result as string;
+              setFormData(prev => ({ ...prev, image_url: imageData }));
+              toast.success('Image pasted');
+            };
+            reader.readAsDataURL(blob);
+          }
+          break;
+        }
+      }
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
+      <AuthenticatedNavbar />
+      <AuthenticatedTabs />
+
+      <main className="max-w-3xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8" onPaste={handlePaste}>
         <form onSubmit={handleSubmit}>
-          <CardUI className="p-6">
+          <CardUI className="p-6 bg-slate-800 border border-slate-700">
             <div className="space-y-6">
+              {/* Image Upload Section */}
+              <div>
+                <h2 className="text-lg font-semibold text-white mb-4">Card Image</h2>
+                <div className="space-y-3">
+                  {formData.image_url && (
+                    <div className="relative w-40 mx-auto">
+                      <img 
+                        src={formData.image_url} 
+                        alt="Card preview" 
+                        className="w-full rounded-lg border border-slate-600"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => setFormData(prev => ({ ...prev, image_url: '' }))}
+                        className="mt-2 w-full"
+                      >
+                        Remove Image
+                      </Button>
+                    </div>
+                  )}
+                  <div className="flex gap-2">
+                    <label className="flex-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                      <div className="bg-slate-700 border-2 border-dashed border-slate-600 rounded-lg p-4 text-center cursor-pointer hover:bg-slate-600 transition-colors">
+                        <Upload className="w-5 h-5 mx-auto text-slate-400 mb-2" />
+                        <p className="text-sm text-slate-300">Click to upload or paste image</p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
               {/* Basic Info */}
               <div>
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Basic Information</h2>
+                <h2 className="text-lg font-semibold text-white mb-4">Basic Information</h2>
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="name">Card Name *</Label>
+                    <Label htmlFor="name" className="text-slate-200 block mb-2">Card Name *</Label>
                     <Input
                       id="name"
                       value={formData.name}
                       onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                       placeholder="e.g., Charizard"
+                      className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
                       required
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="set">Set Name *</Label>
+                      <Label htmlFor="set" className="text-slate-200 block mb-2">Set Name *</Label>
                       <Input
                         id="set"
                         value={formData.set}
                         onChange={(e) => setFormData(prev => ({ ...prev, set: e.target.value }))}
                         placeholder="e.g., Base Set"
+                        className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
                         required
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="card_number">Card Number *</Label>
+                      <Label htmlFor="card_number" className="text-slate-200 block mb-2">Card Number *</Label>
                       <Input
                         id="card_number"
                         value={formData.card_number}
                         onChange={(e) => setFormData(prev => ({ ...prev, card_number: e.target.value }))}
                         placeholder="e.g., 4/102"
+                        className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
                         required
                       />
                     </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="quantity">Quantity</Label>
+                    <Label htmlFor="quantity" className="text-slate-200 block mb-2">Quantity</Label>
                     <Input
                       id="quantity"
                       type="number"
                       min="1"
                       value={formData.quantity}
                       onChange={(e) => setFormData(prev => ({ ...prev, quantity: e.target.value }))}
+                      className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
                     />
                   </div>
                 </div>
@@ -185,12 +252,12 @@ export default function AddEditCard() {
 
               {/* Grading */}
               <div>
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Condition & Grading</h2>
+                <h2 className="text-lg font-semibold text-white mb-4">Condition & Grading</h2>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label htmlFor="is_graded">Graded Card</Label>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Is this card professionally graded?</p>
+                      <Label htmlFor="is_graded" className="text-slate-200 block mb-2">Graded Card</Label>
+                      <p className="text-sm text-slate-400">Is this card professionally graded?</p>
                     </div>
                     <Switch
                       id="is_graded"
@@ -203,12 +270,12 @@ export default function AddEditCard() {
                     <div className="space-y-4 pl-4 border-l-2 border-blue-500">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <Label htmlFor="grading_company">Grading Company</Label>
+                          <Label htmlFor="grading_company" className="text-slate-200 block mb-2">Grading Company</Label>
                           <Select
                             value={formData.grading_company}
                             onValueChange={(value) => setFormData(prev => ({ ...prev, grading_company: value as GradingCompany }))}
                           >
-                            <SelectTrigger id="grading_company">
+                            <SelectTrigger id="grading_company" className="bg-slate-700 border-slate-600 text-white">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -222,7 +289,7 @@ export default function AddEditCard() {
                         </div>
 
                         <div>
-                          <Label htmlFor="grading_grade">Grade</Label>
+                          <Label htmlFor="grading_grade" className="text-slate-200 block mb-2">Grade</Label>
                           <Input
                             id="grading_grade"
                             type="number"
@@ -232,28 +299,30 @@ export default function AddEditCard() {
                             value={formData.grading_grade}
                             onChange={(e) => setFormData(prev => ({ ...prev, grading_grade: e.target.value }))}
                             placeholder="e.g., 9"
+                            className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <Label htmlFor="grading_cert">Certification Number</Label>
+                        <Label htmlFor="grading_cert" className="text-slate-200 block mb-2">Certification Number</Label>
                         <Input
                           id="grading_cert"
                           value={formData.grading_cert}
                           onChange={(e) => setFormData(prev => ({ ...prev, grading_cert: e.target.value }))}
                           placeholder="e.g., 12345678"
+                          className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
                         />
                       </div>
                     </div>
                   ) : (
                     <div>
-                      <Label htmlFor="condition">Condition</Label>
+                      <Label htmlFor="condition" className="text-slate-200 block mb-2">Condition</Label>
                       <Select
                         value={formData.condition}
                         onValueChange={(value) => setFormData(prev => ({ ...prev, condition: value as CardCondition }))}
                       >
-                        <SelectTrigger id="condition">
+                        <SelectTrigger id="condition" className="bg-slate-700 border-slate-600 text-white">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -272,10 +341,10 @@ export default function AddEditCard() {
 
               {/* Value */}
               <div>
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Value</h2>
+                <h2 className="text-lg font-semibold text-white mb-4">Value</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="purchase_price">Purchase Price ($)</Label>
+                    <Label htmlFor="purchase_price" className="text-slate-200 block mb-2">Purchase Price ($)</Label>
                     <Input
                       id="purchase_price"
                       type="number"
@@ -284,11 +353,12 @@ export default function AddEditCard() {
                       value={formData.purchase_price}
                       onChange={(e) => setFormData(prev => ({ ...prev, purchase_price: e.target.value }))}
                       placeholder="0.00"
+                      className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="estimated_value">Estimated Value ($)</Label>
+                    <Label htmlFor="estimated_value" className="text-slate-200 block mb-2">Estimated Value ($)</Label>
                     <Input
                       id="estimated_value"
                       type="number"
@@ -297,6 +367,7 @@ export default function AddEditCard() {
                       value={formData.estimated_value}
                       onChange={(e) => setFormData(prev => ({ ...prev, estimated_value: e.target.value }))}
                       placeholder="0.00"
+                      className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
                     />
                   </div>
                 </div>
@@ -304,7 +375,7 @@ export default function AddEditCard() {
 
               {/* Tags */}
               <div>
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tags</h2>
+                <h2 className="text-lg font-semibold text-white mb-4">Tags</h2>
                 <div className="flex flex-wrap gap-2">
                   {(['For Trade', 'For Sale', 'PC', 'Investment'] as CardTag[]).map((tag) => (
                     <Button
@@ -313,6 +384,7 @@ export default function AddEditCard() {
                       variant={formData.tags.includes(tag) ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => toggleTag(tag)}
+                      className={formData.tags.includes(tag) ? '' : 'border-slate-600 text-slate-300 hover:bg-slate-700'}
                     >
                       {tag}
                     </Button>
@@ -322,13 +394,14 @@ export default function AddEditCard() {
 
               {/* Notes */}
               <div>
-                <Label htmlFor="notes">Notes</Label>
+                <Label htmlFor="notes" className="text-slate-200 block mb-2">Notes</Label>
                 <Textarea
                   id="notes"
                   value={formData.notes}
                   onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
                   placeholder="Add any additional notes about this card..."
                   rows={4}
+                  className="bg-slate-700 border-slate-600 text-white placeholder-slate-400"
                 />
               </div>
             </div>
@@ -338,19 +411,21 @@ export default function AddEditCard() {
           <div className="flex gap-3 mt-6">
             <Button
               type="button"
-              variant="outline"
               onClick={() => navigate(isEditing ? `/card/${id}` : '/collection')}
-              className="flex-1"
+              className="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-semibold"
             >
               Cancel
             </Button>
-            <Button type="submit" className="flex-1">
-              <Save className="w-4 h-4 mr-2" />
-              {isEditing ? 'Save Changes' : 'Add Card'}
+            <Button 
+              type="submit" 
+              className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold"
+            >
+              {isEditing ? 'Save Changes' : 'Save'}
             </Button>
           </div>
         </form>
       </main>
+      <Footer />
     </div>
   );
 }

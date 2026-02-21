@@ -6,6 +6,8 @@ import { Label } from '../components/ui/label';
 import { Card } from '../components/ui/card';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
+import PublicNavbar from '../components/PublicNavbar';
+import Footer from '../components/Footer';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -37,7 +39,9 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
+      <PublicNavbar />
+      <div className="flex-1 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
         <Card className="border-slate-700 bg-slate-800/50 backdrop-blur">
           <div className="p-8 space-y-6">
@@ -87,16 +91,6 @@ export default function Login() {
               </Button>
             </form>
 
-            {/* Divider */}
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-600"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-slate-800/50 text-slate-400">New to Card Vault?</span>
-              </div>
-            </div>
-
             {/* Signup Link */}
             <div className="text-center">
               <p className="text-slate-400">
@@ -115,6 +109,8 @@ export default function Login() {
           <p className="mb-1">Create an account or use existing credentials</p>
         </div>
       </div>
+      </div>
+      <Footer />
     </div>
   );
 }

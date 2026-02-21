@@ -2,12 +2,14 @@ import { useNavigate } from 'react-router';
 import { Button } from '../components/ui/button';
 import { Card as CardUI } from '../components/ui/card';
 import { Home } from 'lucide-react';
+import Footer from '../components/Footer';
 
 export default function NotFound() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
+      <div className="flex-1 flex items-center justify-center p-4">
       <CardUI className="p-8 sm:p-12 text-center max-w-md">
         <div className="text-6xl sm:text-8xl font-bold text-gray-300 dark:text-gray-700 mb-4">
           404
@@ -23,6 +25,8 @@ export default function NotFound() {
           Go Home
         </Button>
       </CardUI>
+      </div>
+      <Footer />
     </div>
   );
 }

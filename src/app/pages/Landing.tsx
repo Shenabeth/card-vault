@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router';
 import { Button } from '../components/ui/button';
 import { useAuth } from '../context/AuthContext';
 import { useEffect } from 'react';
+import PublicNavbar from '../components/PublicNavbar';
+import Footer from '../components/Footer';
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -15,7 +17,9 @@ export default function Landing() {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
+      <PublicNavbar />
+      <div className="flex-1 flex items-center justify-center px-4 py-8">
       <div className="max-w-lg w-full space-y-8 text-center">
         {/* Header */}
         <div className="space-y-4">
@@ -83,8 +87,7 @@ export default function Landing() {
           <Button
             onClick={() => navigate('/signup')}
             size="lg"
-            variant="outline"
-            className="w-full border-slate-600 text-white hover:bg-slate-800"
+            className="w-full bg-slate-700 hover:bg-slate-600 text-white font-semibold border border-slate-500"
           >
             Create Account
           </Button>
@@ -95,6 +98,8 @@ export default function Landing() {
           Start organizing your collection today
         </p>
       </div>
+      </div>
+      <Footer />
     </div>
   );
 }

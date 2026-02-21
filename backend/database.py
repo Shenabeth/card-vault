@@ -18,7 +18,7 @@ def connect_db():
         # In production, this should be removed for security
         client = MongoClient(
             config.MONGODB_URI, 
-            serverSelectionTimeoutMS=5000,
+            serverSelectionTimeoutMS=30000,
             tlsAllowInvalidCertificates=True
         )
         db = client[config.DATABASE_NAME]

@@ -6,6 +6,9 @@ import { Badge } from '../components/ui/badge';
 import { ArrowLeft, Edit, Trash2, Award, Package, DollarSign, Calendar, Tag } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
 import { toast } from 'sonner';
+import Footer from '../components/Footer';
+import AuthenticatedNavbar from '../components/AuthenticatedNavbar';
+import AuthenticatedTabs from '../components/AuthenticatedTabs';
 
 export default function CardDetail() {
   const { id } = useParams<{ id: string }>();
@@ -16,9 +19,9 @@ export default function CardDetail() {
 
   if (!card) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
-        <CardUI className="p-8 text-center">
-          <p className="text-gray-500 dark:text-gray-400 mb-4">Card not found</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+        <CardUI className="p-8 text-center bg-slate-800 border border-slate-700">
+          <p className="text-slate-300 mb-4">Card not found</p>
           <Button onClick={() => navigate('/')}>Go Home</Button>
         </CardUI>
       </div>
@@ -32,9 +35,10 @@ export default function CardDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
+      <AuthenticatedNavbar />      <AuthenticatedTabs />
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <header className="sticky top-16 z-10 bg-slate-800/95 border-b border-slate-700 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -42,25 +46,26 @@ export default function CardDetail() {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate('/collection')}
+                className="text-slate-200 hover:bg-slate-700"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">
                 Card Details
               </h1>
             </div>
             <div className="flex gap-2">
               <Button
-                variant="outline"
                 size="icon"
                 onClick={() => navigate(`/edit/${card._id}`)}
+                className="bg-slate-700 hover:bg-slate-600 text-white"
               >
                 <Edit className="w-4 h-4" />
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <Trash2 className="w-4 h-4 text-red-500" />
+                  <Button size="icon" className="bg-slate-700 hover:bg-slate-600 text-red-500">
+                    <Trash2 className="w-4 h-4" />
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -86,8 +91,8 @@ export default function CardDetail() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Card Image */}
-          <CardUI className="overflow-hidden">
-            <div className="aspect-[2.5/3.5] bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex items-center justify-center p-8 overflow-hidden">
+          <CardUI className="overflow-hidden bg-slate-800 border border-slate-700">
+            <div className="aspect-[2.5/3.5] bg-gradient-to-br from-blue-900/50 to-purple-900/50 flex items-center justify-center p-8 overflow-hidden">
               {card.image_url ? (
                 <img 
                   src={card.image_url} 
@@ -96,13 +101,13 @@ export default function CardDetail() {
                 />
               ) : (
                 <div className="text-center">
-                  <p className="text-3xl sm:text-4xl font-bold text-gray-700 dark:text-gray-300 mb-4">
+                  <p className="text-3xl sm:text-4xl font-bold text-white mb-4">
                     {card.name}
                   </p>
-                  <p className="text-lg text-gray-600 dark:text-gray-400">
+                  <p className="text-lg text-slate-300">
                     {card.set}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                  <p className="text-sm text-slate-400 mt-2">
                     #{card.card_number}
                   </p>
                 </div>
@@ -113,21 +118,21 @@ export default function CardDetail() {
           {/* Card Details */}
           <div className="space-y-4">
             {/* Basic Info */}
-            <CardUI className="p-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Basic Information</h2>
+            <CardUI className="p-6 bg-slate-800 border border-slate-700">
+              <h2 className="text-xl font-bold text-white mb-4">Basic Information</h2>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <Package className="w-5 h-5 text-gray-400" />
+                  <Package className="w-5 h-5 text-slate-400" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Set</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{card.set}</p>
+                    <p className="text-sm text-slate-400">Set</p>
+                    <p className="font-medium text-white">{card.set}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Tag className="w-5 h-5 text-gray-400" />
+                  <Tag className="w-5 h-5 text-slate-400" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Card Number</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{card.card_number}</p>
+                    <p className="text-sm text-slate-400">Card Number</p>
+                    <p className="font-medium text-white">{card.card_number}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -150,7 +155,7 @@ export default function CardDetail() {
             </CardUI>
 
             {/* Grading Info */}
-            <CardUI className="p-6">
+            <CardUI className="p-6 bg-slate-800 border border-slate-700">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <Award className="w-5 h-5" />
                 Condition & Grading
@@ -189,7 +194,7 @@ export default function CardDetail() {
             </CardUI>
 
             {/* Value Info */}
-            <CardUI className="p-6">
+            <CardUI className="p-6 bg-slate-800 border border-slate-700">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <DollarSign className="w-5 h-5" />
                 Value
@@ -229,7 +234,7 @@ export default function CardDetail() {
 
             {/* Tags */}
             {card.tags && card.tags.length > 0 && (
-              <CardUI className="p-6">
+              <CardUI className="p-6 bg-slate-800 border border-slate-700">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Tags</h2>
                 <div className="flex flex-wrap gap-2">
                   {card.tags.map((tag, idx) => (
@@ -243,7 +248,7 @@ export default function CardDetail() {
 
             {/* Notes */}
             {card.notes && (
-              <CardUI className="p-6">
+              <CardUI className="p-6 bg-slate-800 border border-slate-700">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Notes</h2>
                 <p className="text-gray-700 dark:text-gray-300">{card.notes}</p>
               </CardUI>
@@ -251,6 +256,7 @@ export default function CardDetail() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

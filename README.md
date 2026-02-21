@@ -154,7 +154,32 @@ This is what makes Card Vault special. Instead of just tracking cards like a spr
 ### Prerequisites
 - **Node.js 18+** and npm/yarn (for frontend)
 - **Python 3.8+** (for backend)
-- **MongoDB Atlas account** (free tier available)
+- **MongoDB Atlas account** (free tier available) OR **MongoDB installed locally**
+
+---
+
+## ⚡ Quick Start Commands
+
+### Start Frontend (from project root)
+```bash
+npm install                    # First time only
+npm run dev                    # Start Vite dev server at http://localhost:5173
+```
+
+### Start Backend (from project root)
+```bash
+cd backend
+python -m venv venv           # First time only
+pip install -r requirements.txt  # First time only
+python app.py                 # Start Flask server at http://localhost:5000
+```
+
+**Windows PowerShell Users**: If you get execution policy errors, run:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+```
+
+---
 
 ### Frontend Setup
 ```bash
@@ -171,25 +196,56 @@ npm run build
 Frontend runs at `http://localhost:5173`
 
 ### Backend Setup
+
+**Step 1: Setup Database**
+
+Choose one option:
+
+**Option A: MongoDB Atlas (Recommended - Free Cloud Database)**
+1. Create free account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Create a cluster and get connection string
+3. Update `backend/.env` with your MongoDB Atlas URI:
+   ```
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/card_vault
+   ```
+
+**Option B: Local MongoDB**
+1. Install MongoDB Community Server from [mongodb.com](https://www.mongodb.com/try/download/community)
+2. Start MongoDB service:
+   - Windows: `net start MongoDB`
+   - Mac: `brew services start mongodb-community`
+   - Linux: `sudo systemctl start mongod`
+3. Keep default connection in `backend/.env`:
+   ```
+   MONGODB_URI=mongodb://localhost:27017/card_vault
+   ```
+
+**Step 2: Install Backend Dependencies**
 ```bash
 # Navigate to backend directory
 cd backend
 
-# Create and activate Python virtual environment
+# Create Python virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Activate virtual environment
+# Windows: venv\Scripts\activate
+# Mac/Linux: source venv/bin/activate
 
 # Install Python dependencies
 pip install -r requirements.txt
 
-# Configure environment variables
-cp .env.example .env
-# Edit .env with your MongoDB Atlas connection string
+# Configure environment variables (already created if missing)
+# Edit backend/.env with your MongoDB connection string if needed
+```
 
-# Seed demo data (optional)
+**Step 3: Seed Demo Data (Optional)**
+```bash
 python seed_demo_data.py
+```
 
-# Start Flask server
+**Step 4: Start Flask Server**
+```bash
 python app.py
 ```
 
@@ -234,11 +290,3 @@ After seeding demo data:
 - 🔜 Password reset functionality
 - 🔜 Social features (sharing binders)
 - 🔜 Mobile app native version
-
-## 📄 License
-
-MIT
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to open issues or submit pull requests.

@@ -11,6 +11,9 @@ import { toast } from 'sonner';
 import { Card } from '../types';
 import { BinderSlot } from '../components/BinderSlot';
 import { DraggableCard } from '../components/DraggableCard';
+import Footer from '../components/Footer';
+import AuthenticatedNavbar from '../components/AuthenticatedNavbar';
+import AuthenticatedTabs from '../components/AuthenticatedTabs';
 
 export default function BinderEditor() {
   const { id } = useParams<{ id: string }>();
@@ -22,9 +25,9 @@ export default function BinderEditor() {
 
   if (!binder) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
         <CardUI className="p-8 text-center">
-          <p className="text-gray-500 dark:text-gray-400 mb-4">Binder not found</p>
+          <p className="text-slate-300 mb-4">Binder not found</p>
           <Button onClick={() => navigate('/binders')}>Go Back</Button>
         </CardUI>
       </div>
@@ -58,38 +61,40 @@ export default function BinderEditor() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
+        <AuthenticatedNavbar />
+        <AuthenticatedTabs />
+
         {/* Header */}
-        <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <header className="sticky top-24 z-10 bg-slate-800/95 border-b border-slate-700 shadow-lg">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-4 flex-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => navigate('/binders')}
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                </Button>
-                <div className="flex-1">
-                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
-                    {binder.name}
-                  </h1>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {binder.rows}x{binder.columns} layout • {filledSlots}/{totalSlots} slots filled ({percentage}%)
-                  </p>
-                </div>
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate('/binders')}
+                className="text-slate-200 hover:bg-slate-700"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-white">
+                  {binder.name}
+                </h1>
+                <p className="text-sm text-slate-300">
+                  {binder.rows}x{binder.columns} layout • {filledSlots}/{totalSlots} slots filled ({percentage}%)
+                </p>
               </div>
             </div>
           </div>
         </header>
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Binder Grid */}
             <div className="lg:col-span-2">
               <CardUI className="p-4 sm:p-6">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Binder Layout</h2>
+                <h2 className="text-lg font-semibold text-white mb-4">Binder Layout</h2>
                 <div 
                   className="grid gap-2 sm:gap-3"
                   style={{
@@ -149,6 +154,7 @@ export default function BinderEditor() {
             </div>
           </div>
         </main>
+        <Footer />
       </div>
     </DndProvider>
   );

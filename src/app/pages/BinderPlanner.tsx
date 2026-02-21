@@ -10,6 +10,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { ArrowLeft, Plus, Grid3x3, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
+import Footer from '../components/Footer';
+import AuthenticatedNavbar from '../components/AuthenticatedNavbar';
+import AuthenticatedTabs from '../components/AuthenticatedTabs';
 
 export default function BinderPlanner() {
   const { binders, cards } = useData();
@@ -62,28 +65,14 @@ export default function BinderPlanner() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
+      <AuthenticatedNavbar />
+      <AuthenticatedTabs />
+
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <header className="sticky top-24 z-10 bg-slate-800/95 border-b border-slate-700 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate('/')}
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-                  Binder Planner
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Organize your cards in custom binders
-                </p>
-              </div>
-            </div>
+          <div className="flex items-center justify-end">
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button>
@@ -136,9 +125,9 @@ export default function BinderPlanner() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {binders.binders.length === 0 ? (
-          <CardUI className="p-12 text-center">
-            <Grid3x3 className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <p className="text-gray-500 dark:text-gray-400 mb-4">
+          <CardUI className="p-12 text-center bg-slate-800 border border-slate-700">
+            <Grid3x3 className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+            <p className="text-slate-300 mb-4">
               No binders yet. Create your first binder to organize your cards!
             </p>
             <Button onClick={() => setIsDialogOpen(true)}>
@@ -153,21 +142,21 @@ export default function BinderPlanner() {
               return (
                 <CardUI
                   key={binder._id}
-                  className="overflow-hidden hover:shadow-lg transition-shadow"
+                  className="overflow-hidden hover:shadow-lg transition-shadow bg-slate-800 border border-slate-700"
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                        <h3 className="text-lg font-bold text-white mb-1">
                           {binder.name}
                         </h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <p className="text-sm text-slate-400">
                           {binder.rows}x{binder.columns} layout
                         </p>
                       </div>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-red-500">
+                          <Button variant="ghost" size="icon" className="text-slate-400 hover:text-red-500 hover:bg-slate-700">
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </AlertDialogTrigger>
@@ -194,7 +183,7 @@ export default function BinderPlanner() {
                     {/* Mini Preview Grid */}
                     <div className="mb-4">
                       <div 
-                        className="grid gap-1 bg-gray-100 dark:bg-gray-800 p-3 rounded-lg"
+                        className="grid gap-1 bg-slate-700 p-3 rounded-lg"
                         style={{
                           gridTemplateColumns: `repeat(${binder.columns}, minmax(0, 1fr))`
                         }}
@@ -205,7 +194,7 @@ export default function BinderPlanner() {
                             className={`aspect-[2.5/3.5] rounded ${
                               slot 
                                 ? 'bg-gradient-to-br from-blue-400 to-purple-400' 
-                                : 'bg-gray-300 dark:bg-gray-700'
+                                : 'bg-slate-600'
                             }`}
                           />
                         ))}
@@ -215,12 +204,12 @@ export default function BinderPlanner() {
                     {/* Stats */}
                     <div className="space-y-2 mb-4">
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-600 dark:text-gray-400">Completion</span>
-                        <span className="font-medium text-gray-900 dark:text-white">
+                        <span className="text-slate-400">Completion</span>
+                        <span className="font-medium text-white">
                           {stats.filled}/{stats.total} ({stats.percentage}%)
                         </span>
                       </div>
-                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                      <div className="w-full bg-slate-700 rounded-full h-2">
                         <div
                           className="bg-blue-600 h-2 rounded-full transition-all"
                           style={{ width: `${stats.percentage}%` }}
@@ -230,7 +219,7 @@ export default function BinderPlanner() {
 
                     <Button
                       onClick={() => navigate(`/binder/${binder._id}`)}
-                      className="w-full"
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white"
                     >
                       Open Binder
                     </Button>
@@ -240,7 +229,6 @@ export default function BinderPlanner() {
             })}
           </div>
         )}
-      </main>
-    </div>
+      </main>      <Footer />    </div>
   );
 }
