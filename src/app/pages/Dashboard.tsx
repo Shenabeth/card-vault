@@ -1,13 +1,20 @@
 import { Link, useNavigate } from 'react-router';
 import { Card } from '../types';
 import { useData } from '../context/DataContext';
+import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/ui/button';
 import { Card as CardUI } from '../components/ui/card';
-import { Plus, TrendingUp, Grid3x3, Package } from 'lucide-react';
+import { Plus, TrendingUp, Grid3x3, Package, LogOut } from 'lucide-react';
 
 export default function Dashboard() {
   const { cards, binders } = useData();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   const totalCards = cards.cards.reduce((sum, card) => sum + card.quantity, 0);
   const totalGraded = cards.cards.filter(card => card.is_graded).reduce((sum, card) => sum + card.quantity, 0);
@@ -27,16 +34,26 @@ export default function Dashboard() {
                 Card Vault
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                Track your trading card collection
+                Welcome back, <span className="font-semibold">{user?.username}</span>
               </p>
             </div>
-            <Button 
-              onClick={() => navigate('/add')}
-              className="w-full sm:w-auto"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Card
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => navigate('/add')}
+                className="flex-1 sm:flex-none"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Card
+              </Button>
+              <Button 
+                onClick={handleLogout}
+                variant="outline"
+                className="flex-1 sm:flex-none"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </header>
